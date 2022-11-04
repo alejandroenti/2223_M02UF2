@@ -96,6 +96,18 @@ CREATE TABLE weapons (
 );
 
 
+INSERT INTO weapons (weapon, grip, durability, distance,
+			   quality, physic_attack, magic_attack, description,
+			   level, level_min, id_weapon_type)
+	VALUE ("Brazo de bebe", 1, 100, 0.5,
+		60, 10, 0, "Brazo de bebe mutilado",
+		4, 2, 1),
+	      ("Pantalon de pana mojado", 2, 200, 1,
+		150, 45, 5, "Pantalon de Santi",
+		7, 3, 1);
+
+
+
 #Creamos la tabla ITEMS e introducimos sus valores
 CREATE TABLE items (
 	id_item INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -167,6 +179,13 @@ CREATE TABLE weapons_materials (
 	FOREIGN KEY (id_weapon) REFERENCES weapons(id_weapon),
 	FOREIGN KEY (id_material) REFERENCES materials(id_material)
 );
+
+
+INSERT INTO weapons_materials (id_weapon, id_material)
+	VALUE (1, 3),
+    	  (1, 11),
+	  (2, 4),
+	  (2, 12);
 
 
 
