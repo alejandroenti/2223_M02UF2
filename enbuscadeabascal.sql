@@ -2,7 +2,11 @@
 DROP TABLE IF EXISTS armours_materials;
 
 DROP TABLE IF EXISTS characters_weapons;
+DROP TABLE IF EXISTS characters_items;
 
+DROP TABLE IF EXISTS stats;
+
+DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS weapons;
 DROP TABLE IF EXISTS armours;
 DROP TABLE IF EXISTS items;
@@ -13,23 +17,31 @@ DROP TABLE IF EXISTS armours_types;
 DROP TABLE IF EXISTS items_types;
 
 
-#Creamos la tabla CHARACTERS_WEAPONS e introducimos sus valores
-CREATE TABLE characters_weapons (
-	id_character_weapon INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	id_character INT UNSIGNED,
-	id_weapon INT UNSIGNED,
-	FOREIGN KEY (id_character) REFERENCES characters(id_character),
-	FOREIGN KEY (id_weapon) REFERENCES weapons(id_weapon)
+#Creamos la tabla CHARACTERS
+CREATE TABLE characters (
+	id_character INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(32),
+	age INT,
+	race VARCHAR(16),
+	gender CHAR(1),
+	class VARCHAR(16),
+	height FLOAT,
+	weight FLOAT,
+	origin CHAR(3),
+	description TEXT	
 );
 
 
-INSERT INTO characters_weapons (id_character, id_weapon)
-	VALUE (1, 1),
-	      (4, 3),
-              (2, 2),
-              (4, 1),
-              (2, 5);
-
+INSERT INTO characters (name, age, race, gender, class, 
+			weight, height, origin, description)
+	VALUE ("Payoh", 64, "Cambiapieles", 'L', "Dictador",
+		1.75, 80, 'RUM', "Payoh es... un cambiapieles rumano de genero fluido"),
+		("Yuca", 27, "Sirenido", 'F', "Cryptolai",
+		 0.7, 40, 'PUR', "Yuca es... un sirenido hembra de Puerto Rico"),
+		("Yulen", 70, "Nomuerto", 'D', "Minero",
+		 0.8, 25, 'NDE', "Yulen es... un minero no muerto de los Paises Bajos"),
+		("Josema", 3000, "Deidad", 'T', "Procastinador",
+		 3.14, 0, 'PER', "Josema es... una deidad de Peru");
 
 
 #Creamos las tablas de WEAPONS_TYPES e introducimos sus valores
@@ -72,10 +84,12 @@ CREATE TABLE items_types (
 );
 
 INSERT INTO items_types (type, description, icon)
-	VALUE ("Comida", "Alimento rico", "comida.png"),
-          ("Pocion", "Te cura o te mata o lo que sea", "pocion.png"),
-          ("Tesoro", "$_$", "tesoro.png");
-
+	VALUE ("Tesoro", "$_$", "tesoro.png"),
+		("Producto de baño", "No Otaku", "baño.png"),
+		("Putada", "Algo que jode", "putada.png"),
+		("Accesorio", "Complementos que embellecen", "accesorio.png"),
+		("Comida", "Alimento rico", "comida.png"),
+	        ("Pocion", "Te cura o te mata o lo que sea", "pocion.png");
 
 
 #Creamos la tabla WEAPONS
@@ -107,6 +121,50 @@ INSERT INTO weapons (weapon, grip, durability, distance,
 		7, 3, 1);
 
 
+#Creamos la tabla ARMOURS e introducimos sus valores
+CREATE TABLE armours (
+	id_armour INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	armour VARCHAR(24),
+	description TEXT,
+	class VARCHAR(16),
+	rarity INT,
+	weight FLOAT,
+	level INT,
+	level_min INT,
+	cost FLOAT,
+	durability INT,
+	physic_attack FLOAT,
+	physic_defense FLOAT,
+	magic_attack FLOAT,
+	magic_defense FLOAT,
+	notoriety INT,
+	id_armour_type INT UNSIGNED,
+	FOREIGN KEY (id_armour_type) REFERENCES armours_types(id_armour_type)
+);
+
+
+INSERT INTO armours (armour, description, class, rarity, weight,
+		     level, level_min, cost, durability, physic_attack,
+		     physic_defense, magic_attack, magic_defense, notoriety, id_armour_type)
+	VALUE ("Fachaleco", "Chaleco muy espanol", "Dictador", 750, 15.2,
+		17, 14, 999, -1, 60,
+		450, 10, 270, 750, 1),
+		("Fachaleco", "Chaleco muy espanol", "Dictador", 750, 15.2,
+		17, 14, 999, 20, 60,
+		450, 10, 270, 750, 1),
+	("Vestimenta Divina", "Vestido caido del cielo", "Procastinador", 999, 450,
+		99, 90, 999, -1, 80,
+		950, 400, 790, 900, 2),
+	("Carne", "Chuletones", "Nicromante", 10, 2.5,
+		3, 1, 25, 7, 20,
+		50, 0, 10, 180, 2),
+	("Armadura basica", "Armadura basica para noobs", "Nicromante", 5, 7.4,
+		1, 1, 10, 10, 15,
+		45, 10, 27, 350, 2),
+	("Cabeza de reno", "Reno de Papa Noel no se ha portado bien", "Criptolai", 390, 10.6,
+		8, 5, 320, 20, 35,
+		280, 0, 200, 600, 3);
+
 
 #Creamos la tabla ITEMS e introducimos sus valores
 CREATE TABLE items (
@@ -124,8 +182,8 @@ CREATE TABLE items (
     	rarity INT,
     	usages INT,
     	durability INT,
-    	id_item_type INT,
-	FOREIGN KEY (id_item_type) REFERENCES items_types(id_item_type),
+    	id_item_type INT UNSIGNED,
+	FOREIGN KEY (id_item_type) REFERENCES items_types(id_item_type)
 );
 
 
@@ -143,6 +201,51 @@ INSERT INTO items (item, key_item, consumable, cost, id_item_type)
           ("Carne podrida", true, false, 1, 5),
           ("Fragmento escarlata", true, true, 500, 6);
 
+
+
+#Creamos la tabla CHARACTERS_WEAPONS e introducimos sus valores
+CREATE TABLE characters_weapons (
+	id_character_weapon INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	id_character INT UNSIGNED,
+	id_weapon INT UNSIGNED,
+	FOREIGN KEY (id_character) REFERENCES characters(id_character),
+	FOREIGN KEY (id_weapon) REFERENCES weapons(id_weapon)
+);
+
+
+INSERT INTO characters_weapons (id_character, id_weapon)
+	VALUE (1, 1),
+	      (4, 3),
+              (2, 2),
+              (4, 1),
+              (2, 5);
+
+
+# Creamos la tabla CHARACTERS_ITEMS e introducimos sus valores
+CREATE TABLE characters_items (
+	id_charcater_item INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	id_character INT UNSIGNED,
+	id_item INT UNSIGNED,
+	FOREIGN KEY (id_character) REFERENCES characters(id_charcater),
+	FOREIGN KEY (id_item) REFERENCES items(id_item)
+);
+
+
+INSERT INTO characters_items (id_character, id_item)
+	VALUE (4, 4),
+		(3, 3),
+		(1, 3),
+		(1, 2),
+		(2, 1),
+		(3, 6),
+		(2, 8),
+		(1, 9),
+		(2, 5),
+		(4, 7),
+		(2, 7),
+		(1, 8),
+		(2, 6),
+		(1, 3);
 
 
 #Creamos la tabla MATERIALS e introducimos sus valores
@@ -197,3 +300,13 @@ CREATE TABLE armours_materials (
 	FOREIGN KEY (id_armour) REFERENCES armours(id_armour),
 	FOREIGN KEY (id_material) REFERENCES materials(id_material)
 );
+
+INSERT INTO armours_materials (id_armour, id_material)
+	VALUE (1, 7),
+		(1, 8),
+		(2, 9),
+		(2, 10),
+		(3, 5),
+		(4, 4),
+		(5, 3),
+		(5, 11);
