@@ -6,7 +6,6 @@ DROP TABLE IF EXISTS characters_items;
 
 DROP TABLE IF EXISTS stats;
 
-DROP TABLE IF EXISTS characters;
 DROP TABLE IF EXISTS weapons;
 DROP TABLE IF EXISTS armours;
 DROP TABLE IF EXISTS items;
@@ -15,6 +14,8 @@ DROP TABLE IF EXISTS materials;
 DROP TABLE IF EXISTS weapons_types;
 DROP TABLE IF EXISTS armours_types;
 DROP TABLE IF EXISTS items_types;
+
+DROP TABLE IF EXISTS characters;
 
 
 #Creamos la tabla CHARACTERS
@@ -43,6 +44,61 @@ INSERT INTO characters (name, age, race, gender, class,
 		("Josema", 3000, "Deidad", 'T', "Procastinador",
 		 3.14, 0, 'PER', "Josema es... una deidad de Peru");
 
+
+
+#Creamos la tabla STATS
+CREATE TABLE stats(
+	id_charcater_stat INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	hp FLOAT,
+	hp_max FLOAT,
+	xp FLOAT,
+	xp_max INT,
+	level INT,
+	physic_attack FLOAT,
+	physic_defense FLOAT,
+	magic_attack FLOAT,
+	magic_defense FLOAT,
+	critical_rate FLOAT,
+	mp FLOAT,
+	mana INT,
+	intel INT,
+	stamina INT,
+	stealth INT,
+	luck INT,
+	faith INT,
+	velocity INT,
+	dextreity INT,
+	strenght INT,
+	vigor INT,
+	tenacity INT,
+	charisma INT,
+	agility INT,
+	balance INT,
+	id_character INT UNSIGNED,
+	FOREIGN KEY (id_character) REFERENCES characters(id_character)
+);
+
+
+INSERT INTO stats (hp, hp_max, xp, xp_max, level, physic_attack, physic_defense,
+		magic_attack, magic_defense, critical_rate, mp, mana, intel, stamina,
+		stealth, luck, faith, velocity, dextreity, strenght, vigor, 
+		tenacity, charisma, agility, balance, id_character)
+	VALUE (950, 950, 820, 1000, 2, 320, 180,
+		120, 60, 30, 300, 60, 38, 150,
+		50, 60, 45, 30, 12, 10, 76,
+		30, 50, 80, 65, 1),
+		(0, 0, 500, 525, 1, 34, 120,
+		500, 120, 38, 700, 600, 700, 80,
+		30, 18, 28, 49, 16, 59, 98,
+		78, 84, 35, 45, 3),
+		(100, 1000, 999, 999, 69, 540, 390,
+		999, 999, 450, 1000, 890, 999, 700,
+		49, 28, 48, 18, 90, 68, 78,
+		18, 27, 90, 84, 4),
+		(200, 200, 150, 175, 2, 145, 100,
+		250, 200, 190, 750, 600, 400, 280,
+		17, 89, 28, 18, 29, 56, 34,
+		90, 84, 23, 1, 2);
 
 #Creamos las tablas de WEAPONS_TYPES e introducimos sus valores
 CREATE TABLE weapons_types (
@@ -215,10 +271,9 @@ CREATE TABLE characters_weapons (
 
 INSERT INTO characters_weapons (id_character, id_weapon)
 	VALUE (1, 1),
-	      (4, 3),
+	      (4, 2),
               (2, 2),
-              (4, 1),
-              (2, 5);
+              (4, 1);
 
 
 # Creamos la tabla CHARACTERS_ITEMS e introducimos sus valores
@@ -226,7 +281,7 @@ CREATE TABLE characters_items (
 	id_charcater_item INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
 	id_character INT UNSIGNED,
 	id_item INT UNSIGNED,
-	FOREIGN KEY (id_character) REFERENCES characters(id_charcater),
+	FOREIGN KEY (id_character) REFERENCES characters(id_character),
 	FOREIGN KEY (id_item) REFERENCES items(id_item)
 );
 
